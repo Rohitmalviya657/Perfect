@@ -1,10 +1,12 @@
 import axios, { formToJSON } from "axios"
 import { useState } from "react"
+import { useNavigate } from "react-router"
 function Login() {
     const [user, setUser] = useState({
         email: "",
         password: ""
     })
+    const navigate = useNavigate();
     const handle = (e) => {
         let { name, value } = e.target
         setUser({
@@ -21,6 +23,8 @@ function Login() {
 
             const response = await axios.post("http://localhost:5000/user/login", user)
             alert("login succes")
+            localStorage.setItem("token", response.data.token);
+            navigate("/updatedelete")
 
         } catch (error) {
             console.log("something went rong");

@@ -3,27 +3,40 @@ import axios from 'axios';
 
 function UserListWithDelete() {
     const [users, setUsers] = useState([]);
-    const [selectedImage, setSelectedImage] = useState({}); // Store image per user
+    const [selectedImage, setSelectedImage] = useState({});
 
     useEffect(() => {
         fetchUsers();
     }, []);
 
+    const token = localStorage.getItem("token");
     const fetchUsers = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/user/all");
-            console.log(res);
 
+
+            const res = await axios.get("http://localhost:5000/user/all", {
+                headers: {
+                    Authorization: `Bearer ${token}` // Send token in header
+                }
+            });
+
+            console.log(res);
             setUsers(res.data);
         } catch (err) {
             console.error("Error fetching users", err);
+            alert("Unauthorized: Please login again");
         }
     };
 
     const deleteUser = async (id) => {
+
         try {
-            await axios.delete(`http://localhost:5000/user/delete/${id}`);
-            alert("User deleted");
+            await axios.delete(`http://localhost:5000/user/delete/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
             fetchUsers();
         } catch (err) {
             console.error("Delete failed", err);
@@ -48,7 +61,10 @@ function UserListWithDelete() {
 
         try {
             await axios.put("http://localhost:5000/user/update-image", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`
+                },
             });
 
             alert("Image updated successfully");
