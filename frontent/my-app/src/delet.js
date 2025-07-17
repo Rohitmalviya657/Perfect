@@ -16,7 +16,7 @@ function UserListWithDelete() {
 
             const res = await axios.get("http://localhost:5000/user/all", {
                 headers: {
-                    Authorization: `Bearer ${token}` // Send token in header
+                    Authorization: `Bearer ${token}`
                 }
             });
 

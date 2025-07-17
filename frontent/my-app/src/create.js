@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import * as Yup from 'yup';
 import { useNavigate } from "react-router";
 
-// ✅ Yup Validation Schema
+
 const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     email: Yup.string().email('Invalid email').required('Email is required'),
@@ -33,7 +33,7 @@ function Create() {
         e.preventDefault();
 
         try {
-            // ✅ Validate data using Yup
+
             await validationSchema.validate(user, { abortEarly: false });
 
             const formData = new FormData();
@@ -51,7 +51,7 @@ function Create() {
             navigate("/login");
         } catch (error) {
             if (error.name === "ValidationError") {
-                // Show all validation errors
+
                 alert(error.errors.join("\n"));
             } else {
                 console.log("Something went wrong:", error);

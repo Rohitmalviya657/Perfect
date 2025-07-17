@@ -9,7 +9,7 @@ export const verifyToken = (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     try {
-        const decoded = jwt.verify(token, "Rohit123"); // <- Use correct secret here
+        const decoded = jwt.verify(token, "Rohit123");
         req.user = decoded;
         next();
     } catch (err) {

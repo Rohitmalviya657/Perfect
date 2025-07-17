@@ -37,7 +37,7 @@ export const Create = async (req, res) => {
 
 
 export const login = async (req, res) => {
-    const { email, password } = req.body;
+    let { email, password } = req.body;
     console.log("Received body:", req.body);
 
     try {
@@ -137,6 +137,8 @@ export const updateImageByEmail = async (req, res) => {
         res.status(500).json({ msg: "Server error" });
     }
 };
+
+
 
 export const getAllUsers = async (req, res) => {
     try {
