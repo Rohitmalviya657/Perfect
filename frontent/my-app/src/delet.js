@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './Userlist.css';
 
 function UserListWithDelete() {
     const [users, setUsers] = useState([]);
@@ -10,17 +11,14 @@ function UserListWithDelete() {
     }, []);
 
     const token = localStorage.getItem("token");
+
     const fetchUsers = async () => {
         try {
-
-
             const res = await axios.get("http://localhost:5000/user/all", {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-
-            console.log(res);
             setUsers(res.data);
         } catch (err) {
             console.error("Error fetching users", err);
@@ -29,14 +27,12 @@ function UserListWithDelete() {
     };
 
     const deleteUser = async (id) => {
-
         try {
             await axios.delete(`http://localhost:5000/user/delete/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
-
             fetchUsers();
         } catch (err) {
             console.error("Delete failed", err);
@@ -77,61 +73,62 @@ function UserListWithDelete() {
 
     return (
         <div className="container mt-5">
-            <h3>All Users</h3>
-            <table className="table table-bordered mt-3">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Image</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.length === 0 ? (
-                        <tr><td colSpan="5">No users found</td></tr>
-                    ) : (
-                        users.map((user) => (
-                            <tr key={user._id}>
-                                <td>{user._id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>
-                                    {user.image && (
-                                        <img
-                                            src={`http://localhost:5000/my-uploads/${user.image}`}
-                                            alt="User"
-                                            width="100"
-                                            height="100"
+            <h3 className="text-center mb-4">All Users</h3>
+            <div className="table-responsive">
+                <table className="table table-bordered align-middle">
+                    <thead className="table-light text-center">
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Image</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.length === 0 ? (
+                            <tr><td colSpan="5" className="text-center">No users found</td></tr>
+                        ) : (
+                            users.map((user) => (
+                                <tr key={user._id}>
+                                    <td>{user._id}</td>
+                                    <td>{user.name}</td>
+                                    <td>{user.email}</td>
+                                    <td>
+                                        {user.image && (
+                                            <img
+                                                src={`http://localhost:5000/my-uploads/${user.image}`}
+                                                alt="User"
+                                                className="img-fluid mb-2"
+                                                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                                            />
+                                        )}
+                                        <input
+                                            type="file"
+                                            className="form-control mb-1"
+                                            onChange={(e) => handleFileChange(e, user._id)}
                                         />
-
-
-                                    )}
-                                    <input
-                                        type="file"
-                                        onChange={(e) => handleFileChange(e, user._id)}
-                                    />
-                                    <button
-                                        className="btn btn-sm btn-primary mt-1"
-                                        onClick={() => updateImage(user.email, user._id)}
-                                    >
-                                        Update Image
-                                    </button>
-                                </td>
-                                <td>
-                                    <button
-                                        className="btn btn-danger"
-                                        onClick={() => deleteUser(user._id)}
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))
-                    )}
-                </tbody>
-            </table>
+                                        <button
+                                            className="btn btn-sm btn-primary w-100"
+                                            onClick={() => updateImage(user.email, user._id)}
+                                        >
+                                            Update Image
+                                        </button>
+                                    </td>
+                                    <td className="text-center">
+                                        <button
+                                            className="btn btn-sm btn-danger"
+                                            onClick={() => deleteUser(user._id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }
